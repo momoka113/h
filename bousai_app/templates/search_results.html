@@ -219,7 +219,7 @@
           <dd><span class="availability-badge {{ availability_class }}">{{ availability_label }}</span></dd>
         </div>
       </dl>
-      {% if shelter.get('pet_allowed') is not none or shelter.get('pets_allowed') is not none or shelter.get('barrier_free') is not none or shelter.get('hazards') %}
+      {% if shelter.get('pet_allowed') is not none or shelter.get('pets_allowed') is not none or shelter.get('barrier_free') is not none or shelter.get('hazards') or shelter.get('facilities') %}
       <div class="shelter-facilities" aria-label="対応設備">
         {% if shelter.get('pet_allowed', shelter.get('pets_allowed')) is true %}
         <span class="facility-badge" title="ペット可">
@@ -236,6 +236,11 @@
           <span class="facility-icon" aria-hidden="true">♿</span>バリアフリー
         </span>
         {% endif %}
+        {% for facility in shelter.get('facilities', []) %}
+          {% if facility not in ('ペット可', 'バリアフリー') %}
+        <span class="facility-badge">{{ facility }}</span>
+          {% endif %}
+        {% endfor %}
         {% if shelter.get('hazards') %}
         <span class="facility-badge">対応: {{ shelter.get('hazards')|join('・') }}</span>
         {% endif %}

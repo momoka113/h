@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}避難所の開設状況を編集 - 防災アプリ{% endblock %}
+
+{% block content %}
+<section class="shelter-edit-card" aria-labelledby="shelter-edit-title">
+  <h2 id="shelter-edit-title">避難所の開設状況を編集</h2>
+
+  {% if shelter %}
+  <p class="shelter-edit-name">{{ shelter.get('name', '名称未登録') }}</p>
+
+  {% if success %}
+  <p class="edit-success" role="status">開設状況を更新しました。</p>
+  {% endif %}
+
+  {% if error %}
+  <p class="edit-error" role="alert">{{ message }}</p>
+  {% endif %}
+
+  <form class="shelter-edit-form" method="post">
+    <label for="opening_status">開設状況</label>
+    <select id="opening_status" name="opening_status" required>
+      <option value="" {% if not opening_status %}selected{% endif %} disabled>選択してください</option>
+      {% for status in statuses %}
+      <option value="{{ status }}" {% if opening_status == status %}selected{% endif %}>{{ status }}</option>
+      {% endfor %}
+    </select>
+    <div class="shelter-edit-actions">
+      <button class="edit-submit" type="submit">更新</button>
+      <a href="{{ url_for('shelter_register') }}">登録済み避難所に戻る</a>
+    </div>
+  </form>
+  {% elif error %}
+  <p class="edit-error" role="alert">{{ message }}</p>
+  {% else %}
+  <p class="edit-error" role="alert">指定された避難所が見つかりません。</p>
+  <p><a href="{{ url_for('shelter_register') }}">避難所登録に戻る</a></p>
+  {% endif %}
+</section>
+
+<style>
+  .shelter-edit-card {
+    width: 100%;
+    max-width: 640px;
+    margin: 0 auto;
+    padding: clamp(18px, 4vw, 32px);
+    border: 1px solid #e1e7ef;
+    border-radius: 12px;
+    background: var(--app-surface);
+    box-shadow: 0 4px 16px rgba(42, 69, 108, 0.08);
+  }
+
+  .shelter-edit-card h2 {
+    margin: 0 0 16px;
+    color: var(--app-blue);
+    font-size: 24px;
+  }
+
+  .shelter-edit-name {
+    margin: 0 0 24px;
+    font-size: 18px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+  }
+
+  .shelter-edit-form {
+    display: grid;
+    gap: 10px;
+  }
+
+  .shelter-edit-form label {
+    font-weight: 700;
+  }
+
+  .shelter-edit-form select {
+    width: 100%;
+    min-height: 46px;
+    padding: 9px 12px;
+    border: 1px solid #c7d0dc;
+    border-radius: 6px;
+    background: #fff;
+    color: var(--app-text);
+    font: inherit;
+  }
+
+  .shelter-edit-form select:focus-visible {
+    border-color: var(--app-blue);
+    outline: 3px solid rgba(45, 92, 168, 0.2);
+    outline-offset: 1px;
+  }
+
+  .shelter-edit-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 10px;
+  }
+
+  .edit-submit {
+    min-width: 100px;
+    min-height: 46px;
+    padding: 9px 24px;
+    border: 0;
+    border-radius: 6px;
+    background: var(--app-blue);
+    color: #fff;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+  }
+
+  .edit-submit:hover {
+    background: var(--app-blue-dark);
+  }
+
+  .edit-success,
+  .edit-error {
+    margin: 0 0 20px;
+    padding: 12px 16px;
+    border-radius: 7px;
+  }
+
+  .edit-success {
+    color: #176b35;
+    background: #e2f4e8;
+  }
+
+  .edit-error {
+    color: #8d2525;
+    background: #fdecec;
+  }
+</style>
+{% endblock %}

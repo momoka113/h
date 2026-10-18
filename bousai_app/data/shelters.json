@@ -58,5 +58,22 @@
     "evacuees": 80,
     "pet_allowed": false,
     "barrier_free": false
+  },
+  {
+    "id": 9,
+    "name": "NTTデータ関西",
+    "address": "大阪府大阪市北区堂島3-1-21",
+    "opening_status": "開設中",
+    "capacity": 500,
+    "evacuees": 0,
+    "hazards": [
+      "地震",
+      "洪水"
+    ],
+    "facilities": [
+      "バリアフリー"
+    ],
+    "pet_allowed": false,
+    "barrier_free": true
   }
 ]

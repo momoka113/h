@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}登録内容の確認 - 防災アプリ{% endblock %}
+
+{% block content %}
+<section class="register-confirm-card" aria-labelledby="register-confirm-title">
+  <h2 id="register-confirm-title">登録内容の確認</h2>
+  <p class="register-confirm-notice">公開する避難所情報に誤りがないか確認してください。</p>
+
+  <dl class="register-confirm-details">
+    <div><dt>避難所名</dt><dd>{{ values.name }}</dd></div>
+    <div><dt>住所</dt><dd>{{ values.address }}</dd></div>
+    <div><dt>収容人数</dt><dd>{{ values.capacity }}人</dd></div>
+    <div><dt>開設状況</dt><dd>{{ values.opening_status }}</dd></div>
+    <div>
+      <dt>対応できる災害種別</dt>
+      <dd>{% if hazards %}{{ hazards|join('・') }}{% else %}選択なし{% endif %}</dd>
+    </div>
+    <div>
+      <dt>設備・対応</dt>
+      <dd>{% if facilities %}{{ facilities|join('・') }}{% else %}選択なし{% endif %}</dd>
+    </div>
+  </dl>
+
+  <form class="register-confirm-form" method="post" action="{{ url_for('shelter_register') }}">
+    <input type="hidden" name="name" value="{{ values.name }}">
+    <input type="hidden" name="address" value="{{ values.address }}">
+    <input type="hidden" name="capacity" value="{{ values.capacity }}">
+    <input type="hidden" name="opening_status" value="{{ values.opening_status }}">
+    {% for hazard in hazards %}
+    <input type="hidden" name="hazards" value="{{ hazard }}">
+    {% endfor %}
+    {% for facility in facilities %}
+    <input type="hidden" name="facilities" value="{{ facility }}">
+    {% endfor %}
+    <div class="register-confirm-actions">
+      <button class="confirm-back" type="submit" name="action" value="back">戻って修正</button>
+      <button class="confirm-submit" type="submit" name="action" value="register">この内容で登録</button>
+    </div>
+  </form>
+</section>
+
+<style>
+  .register-confirm-card {
+    width: 100%;
+    max-width: 640px;
+    margin: 0 auto;
+    padding: clamp(18px, 4vw, 32px);
+    border: 1px solid #e1e7ef;
+    border-radius: 12px;
+    background: var(--app-surface);
+    box-shadow: 0 4px 16px rgba(42, 69, 108, 0.08);
+  }
+
+  .register-confirm-card h2 {
+    margin: 0 0 8px;
+    color: var(--app-blue);
+    font-size: 25px;
+  }
+
+  .register-confirm-notice {
+    margin: 0 0 24px;
+    color: var(--app-muted);
+  }
+
+  .register-confirm-details {
+    display: grid;
+    gap: 0;
+    margin: 0 0 24px;
+    border-top: 1px solid #e1e7ef;
+  }
+
+  .register-confirm-details > div {
+    display: grid;
+    grid-template-columns: minmax(9em, 1fr) 2fr;
+    gap: 12px;
+    padding: 12px 4px;
+    border-bottom: 1px solid #e1e7ef;
+  }
+
+  .register-confirm-details dt {
+    color: var(--app-muted);
+    font-weight: 700;
+  }
+
+  .register-confirm-details dd {
+    min-width: 0;
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .register-confirm-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .register-confirm-actions button {
+    min-height: 46px;
+    padding: 9px 18px;
+    border: 0;
+    border-radius: 6px;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+  }
+
+  .confirm-back {
+    color: var(--app-text);
+    background: #edf0f3;
+  }
+
+  .confirm-submit {
+    color: #fff;
+    background: var(--app-blue);
+  }
+
+  .confirm-submit:hover {
+    background: var(--app-blue-dark);
+  }
+
+  @media (max-width: 480px) {
+    .register-confirm-details > div {
+      grid-template-columns: 1fr;
+      gap: 4px;
+    }
+  }
+</style>
+{% endblock %}
